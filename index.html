@@ -127,8 +127,8 @@
       localStorage.setItem('estadoMaterias', JSON.stringify(estados));
     }
 
-    function tieneRequisitosAprobados(reqs) {
-      return reqs.every(r => estados[r] === 'aprobada');
+    function tieneRequisitosRegularizados(reqs) {
+      return reqs.every(r => estados[r] === 'regularizada' || estados[r] === 'aprobada');
     }
 
     function crearMalla() {
@@ -146,9 +146,9 @@
           div.className = "materia";
           div.textContent = mat.nombre;
 
-          if (mat.requisitos && !tieneRequisitosAprobados(mat.requisitos)) {
+          if (mat.requisitos && !tieneRequisitosRegularizados(mat.requisitos)) {
             div.classList.add("bloqueada");
-            div.dataset.tooltip = "Falta: " + mat.requisitos.filter(r => estados[r] !== 'aprobada').join(", ");
+            div.dataset.tooltip = "Falta: " + mat.requisitos.filter(r => !tieneRequisitosRegularizados([r])).join(", ");
           } else {
             if (estados[mat.nombre]) {
               div.classList.add(estados[mat.nombre]);
